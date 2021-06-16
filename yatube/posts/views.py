@@ -1,9 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
-from django.db.models import Count
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
 
 from .forms import PostForm
 from .models import Group
