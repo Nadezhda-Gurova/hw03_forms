@@ -79,13 +79,14 @@ def new_post(request):
 @login_required
 def post_edit(request, username, post_id):
     user = get_object_or_404(User, username=username)
-    if request.method == 'GET' and (request.user.id ==
-                                    Post.objects.get(id=post_id).author.id):
+    user_check_id = Post.objects.get(id=post_id).author.id
+    if request.method == 'GET' and (request.user.id
+                                    == user_check_id):
         post = Post.objects.get(id=post_id)
         form = PostForm(instance=post)
         return render(request, 'posts/new.html', {'form': form})
-    elif request.method == 'POST' and (request.user.id ==
-                                       Post.objects.get(id=post_id).author.id):
+    elif request.method == 'POST' and (request.user.id
+                                       == user_check_id):
         form = PostForm(request.POST)
         if form.is_valid():
             post: Post = form.save(False)
