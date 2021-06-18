@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "misc/base.html" %}
 {% block title %}Последние обновления на сайте{% endblock %}
 {% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
@@ -11,5 +11,5 @@
     {% if not forloop.last %}<hr>{% endif %}
   {% endfor %}
 
-  {% include "paginator.html" %}
+  {% include "misc/paginator.html" %}
 {% endblock %}

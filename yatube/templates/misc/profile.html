@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "misc/base.html" %}
 {% block content %}
     <main role="main" class="container">
         <div class="row">
@@ -50,7 +50,7 @@
                                 <div class="btn-group ">
                                     <!-- Ссылка на страницу записи в атрибуте href-->
                                     <a class="btn btn-sm text-muted"
-                                       href="{% url 'post' username=user_profile.username post_id=latest_post_id %}"
+                                       href="{% url 'posts' username=user_profile.username post_id=latest_post_id %}"
                                        role="button">
                                         Добавить комментарий
                                     </a>
@@ -81,7 +81,7 @@
                         <hr>{% endif %}
                 {% endfor %}
                 <!-- Здесь постраничная навигация паджинатора -->
-                {% include "paginator.html" %}
+                {% include "misc/paginator.html" %}
             </div>
         </div>
     </main>

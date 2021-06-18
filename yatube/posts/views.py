@@ -14,7 +14,7 @@ def index(request):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', {'page': page, })
+    return render(request, 'misc/index.html', {'page': page, })
 
 
 def group_posts(request, slug):
@@ -23,7 +23,7 @@ def group_posts(request, slug):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, "group.html", {"group": group, "page": page, })
+    return render(request, "posts/group.html", {"group": group, "page": page, })
 
 
 def profile(request, username):
@@ -34,14 +34,14 @@ def profile(request, username):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     if number_of_posts == 0:
-        return render(request, 'profile.html', {
+        return render(request, 'misc/profile.html', {
             'number_of_posts': number_of_posts, 'user_profile': user,
             'page': page,
         })
     last_post = Post.objects.filter(author_id=user.id).latest('pub_date')
     last_post_text = last_post.text
     pub_date = last_post.pub_date
-    return render(request, 'profile.html', {
+    return render(request, 'misc/profile.html', {
         'number_of_posts': number_of_posts, 'last_post_text': last_post_text,
         'latest_post_id': last_post.id, 'pub_date': pub_date,
         'page': page, 'user_profile': user,
@@ -53,9 +53,9 @@ def post_view(request, username, post_id):
     full_name = f'{user.first_name} {user.last_name}'
     number_of_posts = Post.objects.filter(author_id=user.id).count()
     post = Post.objects.get(id=post_id)
-    return render(request, 'post.html', {
+    return render(request, 'posts/post.html', {
         'username': username, 'full_name': full_name,
-        'number_of_posts': number_of_posts, 'post': post
+        'number_of_posts': number_of_posts, 'posts': post
     })
 
 
@@ -63,7 +63,7 @@ def post_view(request, username, post_id):
 def new_post(request):
     if request.method == 'GET':
         form = PostForm()
-        return render(request, 'new.html', {'form': form, })
+        return render(request, 'posts/new.html', {'form': form, })
     elif request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -71,7 +71,7 @@ def new_post(request):
             post.author = request.user
             post.save()
             return redirect('index')
-        return render(request, 'new.html', {'form': form})
+        return render(request, 'posts/new.html', {'form': form})
 
 
 @login_required
@@ -81,7 +81,7 @@ def post_edit(request, username, post_id):
                                     Post.objects.get(id=post_id).author.id):
         post = Post.objects.get(id=post_id)
         form = PostForm(instance=post)
-        return render(request, 'new.html', {'form': form})
+        return render(request, 'posts/new.html', {'form': form})
     elif request.method == 'POST' and (request.user.id ==
                                        Post.objects.get(id=post_id).author.id):
         form = PostForm(request.POST)
@@ -92,5 +92,5 @@ def post_edit(request, username, post_id):
             post_to_edit.group = post.group
             post_to_edit.save()
             return redirect('post_edit', username=username, post_id=post_id)
-        return render(request, 'new.html', {'form': form})
+        return render(request, 'posts/new.html', {'form': form})
     return redirect('post_edit', username=user.username, post_id=post_id)

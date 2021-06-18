@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "misc/base.html" %}
 {% block title %}Записи сообщества {{ group.title }}{% endblock %}
 {% block header %}{{ group.title }}{% endblock %}
 {% block content %}
@@ -10,5 +10,5 @@
     </h3>
     <p> {{ post.text }}</p>
     {% endfor %}
-{% include "paginator.html" %}
+{% include "misc/paginator.html" %}
 {% endblock %}
