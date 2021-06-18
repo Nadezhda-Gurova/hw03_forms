@@ -22,7 +22,7 @@ class Post(models.Model):
                               blank=True, null=True, related_name="posts")
 
     def __str__(self):
-        return self.text
+        return self.text[:50]
 
     @property
     def pub_date_format(self):
