@@ -41,11 +41,8 @@ def profile(request, username):
             'page': page,
         })
     last_post = Post.objects.filter(author_id=user.id).latest('pub_date')
-    last_post_text = last_post.text
-    pub_date = last_post.pub_date
     return render(request, 'misc/profile.html', {
-        'number_of_posts': number_of_posts, 'last_post_text': last_post_text,
-        'latest_post_id': last_post.id, 'pub_date': pub_date,
+        'number_of_posts': number_of_posts, 'latest_post_id': last_post.id,
         'page': page, 'user_profile': user,
     })
 
@@ -79,21 +76,20 @@ def new_post(request):
 @login_required
 def post_edit(request, username, post_id):
     user = get_object_or_404(User, username=username)
-    user_check_id = Post.objects.get(id=post_id).author.id
+    post = Post.objects.get(id=post_id)
+    user_check_id = post.author.id
     if request.method == 'GET' and (request.user.id
                                     == user_check_id):
-        post = Post.objects.get(id=post_id)
         form = PostForm(instance=post)
         return render(request, 'posts/new.html', {'form': form})
     elif request.method == 'POST' and (request.user.id
                                        == user_check_id):
         form = PostForm(request.POST)
         if form.is_valid():
-            post: Post = form.save(False)
-            post_to_edit = Post.objects.get(id=post_id)
-            post_to_edit.text = post.text
-            post_to_edit.group = post.group
-            post_to_edit.save()
+            post_form = form.save(False)
+            post.text = post_form.text
+            post.group = post_form.group
+            post.save()
             return redirect('post_edit', username=username, post_id=post_id)
         return render(request, 'posts/new.html', {'form': form})
     return redirect('post_edit', username=user.username, post_id=post_id)
