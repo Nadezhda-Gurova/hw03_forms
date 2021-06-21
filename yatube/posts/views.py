@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
@@ -71,6 +72,7 @@ def new_post(request):
             post.save()
             return redirect('index')
         return render(request, 'posts/new.html', {'form': form})
+    return HttpResponseBadRequest("The request is not valid.")
 
 
 @login_required
